@@ -158,7 +158,8 @@
                 throw new Error('Failed to fetch IP information');
             }
         } catch (error) {
-            console.error(error);
+            console.error('Error fetching Geo Info:', error);
+            alert("Failed to fetch location information.");
             return null;
         }
     }
